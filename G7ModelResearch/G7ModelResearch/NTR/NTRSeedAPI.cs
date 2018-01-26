@@ -131,8 +131,8 @@ namespace G7ModelResearch
         {
             DataReady = false;
             Read(addr, size, Pid);
-            int timeout = 10;
-            do { Thread.Sleep(100); timeout--; } while (!DataReady && timeout > 0); // Try thread later
+            int timeout = 200;
+            do { Thread.Sleep(10); timeout--; } while (!DataReady && timeout > 0); // Try thread later
             if (timeout == 0) return null;
             return Data;
         }

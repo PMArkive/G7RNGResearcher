@@ -63,7 +63,7 @@ namespace G7ModelResearch
                             if (ModelIndex == lastModelNumber)
                             {
                                 Time++;
-                                Log.Items.RemoveAt(Math.Max(0, Log.Items.Count - 1));
+                                if (Log.Items.Count > 0) Log.Items.RemoveAt(Log.Items.Count - 1);
                             }
                             else
                             {
@@ -104,7 +104,7 @@ namespace G7ModelResearch
                             {
                                 if (ModelIndex == lastModelNumber)
                                 {
-                                    Log.Items.RemoveAt(Math.Max(0, Log.Items.Count - 1));
+                                    if (Log.Items.Count > 0) Log.Items.RemoveAt(Log.Items.Count - 1);
                                     Log.Items.Add("ModelNumber:" + lastModelNumber.ToString() + "\t\t x " + (Time + 1).ToString());
                                     Time = -1;
                                 }
