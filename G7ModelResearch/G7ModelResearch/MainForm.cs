@@ -67,7 +67,13 @@ namespace G7ModelResearch
                             }
                             else
                             {
-                                Time = 1;
+                                if (Time == -1)
+                                {
+                                    Log.Items.Add((ModelIndex - lastModelNumber).ToString() + "Model Passed");
+                                    Time = 0;
+                                }
+                                else
+                                    Time = 1;
                                 lastModelNumber = ModelIndex;
                             }
                             if (ModelIndex > 0)
@@ -95,12 +101,28 @@ namespace G7ModelResearch
                         else // Other usage
                         {
                             if (ModelIndex > 0)
-                                Log.Items.Add(ModelIndex.ToString() + "Model Passed");
-                            Time = 0;
+                            {
+                                if (ModelIndex == lastModelNumber)
+                                {
+                                    Log.Items.RemoveAt(Math.Max(0, Log.Items.Count - 1));
+                                    Log.Items.Add("ModelNumber:" + lastModelNumber.ToString() + "\t\t x " + (Time + 1).ToString());
+                                    Time = -1;
+                                }
+                                else
+                                    Log.Items.Add(ModelIndex.ToString() + "Model Passed");
+                            }
+                            Time = Math.Min(Time, 0);
                             switch (output[0])
                             {
                                 case 4:
                                     Log.Items.Add("Lead Ability Check");
+                                    break;
+                                case 5:
+                                    Log.Items.Add("Generating Pokemon");
+                                    // B_Disable_Click(null, null);
+                                    break;
+                                case 6:
+                                    Log.Items.Add("Custom");
                                     break;
                             }
                             Log.Items.Add("ModelNumber:" + lastModelNumber.ToString() + "\t\t x 0");

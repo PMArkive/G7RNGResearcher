@@ -33,11 +33,13 @@ namespace G7ModelResearch
         private static string[] titleidstr = { "175e00", "1b5100" };
         
         // Debugger
-        public void Disable() { bpdis(2); bpdis(3); bpdis(4); resume(); }
-        public void Enable() { bpena(2); bpena(3); bpdis(4); }
+        public void Disable() { bpdis(2); bpdis(3); bpdis(4); bpdis(5); bpdis(6); resume(); }
+        public void Enable() { bpena(2); bpena(3); bpena(4); bpena(5); bpena(6); }
         private uint FrameOffset;
         private uint BlinkOffset;
         private uint SyncOffset;
+        private uint PKMGenOffset;
+        private uint ResearchOffset;
 
         private bool getGame(string logmsg)
         {
@@ -56,11 +58,13 @@ namespace G7ModelResearch
                 case 1:
                     NfcOffset = 0x3E14C0;
                     FrameOffset = 0x3A3C8C; BlinkOffset = 0x40F3B0; SyncOffset = 0x399650;
+                    PKMGenOffset = 0x318A4C; ResearchOffset = 0x3A3AAC;
                     break;
                 case 2:
                 case 3:
                     NfcOffset = Gameversion == 2 ? 0x3F341Cu : 0x3F3420u;
                     FrameOffset = 0x3B2C10; BlinkOffset = 0x421E4C; SyncOffset = 0x3A7FE0;
+                    PKMGenOffset = 0x320C4C; ResearchOffset = 0x3B2A74;
                     break;
             }
             DebuggerMode();
@@ -117,6 +121,8 @@ namespace G7ModelResearch
             bpadd(FrameOffset, "code"); bpdis(2);
             bpadd(BlinkOffset, "code"); bpdis(3);
             bpadd(SyncOffset, "code"); bpdis(4);
+            bpadd(PKMGenOffset, "code"); bpdis(5);
+            bpadd(ResearchOffset, "code"); bpdis(6);
             SendMsg("Breakpoint Set");
             resume();
         }

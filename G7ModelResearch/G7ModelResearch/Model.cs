@@ -4,7 +4,8 @@ namespace G7ModelResearch
 {
     public class Model
     {
-        public static uint Size;
+        public const uint Size = 0x100;
+
         public int Index { get; set; }
         public bool Active => Index >= 0;
         public uint address;
@@ -25,6 +26,6 @@ namespace G7ModelResearch
         public byte State => data[0xDF];
         public byte Count => data[0xE1];
         public bool DoubleBlink => data[0xE4] == 1;
-        public bool UseRNG => !DoubleBlink && (State == 0 && Count < 2 || State == 5);
+        public bool UseRNG => Active && !DoubleBlink && (State == 0 && Count < 2 || State == 5);
     }
 }
