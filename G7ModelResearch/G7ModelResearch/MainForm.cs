@@ -32,6 +32,7 @@ namespace G7ModelResearch
                 Log.Items.Add("Console Connected");
                 Properties.Settings.Default.IP = IP.Text;
                 Properties.Settings.Default.Save();
+                BP.Enabled = 
                 B_Connect.Enabled = false;
                 B_Disconnect.Enabled = true;
                 NTR_Timer.Enabled = true;
@@ -43,6 +44,7 @@ namespace G7ModelResearch
         {
             Log.Items.Add(Success ? "Disconnected" : "No Connection");
             NTR_Timer.Enabled = false;
+            BP.Enabled =
             B_Connect.Enabled = true;
             B_Disconnect.Enabled = false;
         }
@@ -58,7 +60,11 @@ namespace G7ModelResearch
                 {
                     case "Breakpoint":
                         uint[] output = (uint[])e.data;
-                        if (output[0] == 2) // 1 Graphic Frame
+                        if (output[0] == 2) // RNG
+                        {
+                            Log.Items.Add("Address:" + output[1].ToString());
+                        }
+                        else if (output[0] == 3) // 1 Graphic Frame
                         {
                             if (ModelIndex == lastModelNumber)
                             {
@@ -84,7 +90,7 @@ namespace G7ModelResearch
                             RemoveFlag();
                             ModelIndex = 0;
                         }
-                        else if (output[0] == 3) // Blink
+                        else if (output[0] == 4) // Blink
                         {
                             var a = ModelStatus.FirstOrDefault(m => m.address == output[2]);
                             if (a == null)
@@ -114,15 +120,18 @@ namespace G7ModelResearch
                             Time = Math.Min(Time, 0);
                             switch (output[0])
                             {
-                                case 4:
+                                case 5:
                                     Log.Items.Add("Lead Ability Check");
                                     break;
-                                case 5:
-                                    Log.Items.Add("Generating Pokemon");
-                                    // B_Disable_Click(null, null);
-                                    break;
                                 case 6:
-                                    Log.Items.Add("Custom");
+                                    Log.Items.Add("Generating Pokemon");
+                                    B_Disable_Click(null, null);
+                                    break;
+                                case 7:
+                                    if (ntrclient.ResearchOffset != null)
+                                        Log.Items.Add("Custom");
+                                    else
+                                        Log.Items.Add("Cry");
                                     break;
                             }
                             Log.Items.Add("ModelNumber:" + lastModelNumber.ToString() + "\t\t x 0");
@@ -156,6 +165,18 @@ namespace G7ModelResearch
             ntrclient.setServer(IP.Text, 8000);
             try
             {
+                uint A = Convert.ToUInt32(BP.Text,16);
+                if (A > 0)
+                    ntrclient.ResearchOffset = A;
+                else
+                    ntrclient.ResearchOffset = null;
+            }
+            catch
+            {
+                ntrclient.ResearchOffset = null;
+            }
+            try
+            {
                 ntrclient.connectToServer();
             }
             catch
@@ -172,6 +193,7 @@ namespace G7ModelResearch
 
         private void B_run_Click(object sender, EventArgs e)
         {
+            ntrclient.bpena(2);
         }
 
         private void B_Enable_Click(object sender, EventArgs e)
@@ -189,6 +211,11 @@ namespace G7ModelResearch
             Log.Items.Clear();
             ModelStatus.Clear();
             ModelIndex = lastModelNumber = Time = 0;
+        }
+
+        private void B_Resume_Click(object sender, EventArgs e)
+        {
+            try { ntrclient.resume(); } catch { };
         }
     }
 }

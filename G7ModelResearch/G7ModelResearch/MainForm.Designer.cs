@@ -41,6 +41,8 @@
             this.B_Enable = new System.Windows.Forms.Button();
             this.Log = new System.Windows.Forms.ListBox();
             this.B_Clear = new System.Windows.Forms.Button();
+            this.B_Resume = new System.Windows.Forms.Button();
+            this.BP = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.DGV)).BeginInit();
             this.SuspendLayout();
             // 
@@ -90,7 +92,7 @@
             // 
             // B_run
             // 
-            this.B_run.Location = new System.Drawing.Point(19, 65);
+            this.B_run.Location = new System.Drawing.Point(88, 99);
             this.B_run.Name = "B_run";
             this.B_run.Size = new System.Drawing.Size(69, 25);
             this.B_run.TabIndex = 122;
@@ -138,10 +140,10 @@
             this.Log.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.Log.FormattingEnabled = true;
-            this.Log.Location = new System.Drawing.Point(11, 114);
+            this.Log.Location = new System.Drawing.Point(11, 140);
             this.Log.Margin = new System.Windows.Forms.Padding(2);
             this.Log.Name = "Log";
-            this.Log.Size = new System.Drawing.Size(340, 238);
+            this.Log.Size = new System.Drawing.Size(340, 212);
             this.Log.TabIndex = 131;
             // 
             // B_Clear
@@ -154,11 +156,32 @@
             this.B_Clear.UseVisualStyleBackColor = true;
             this.B_Clear.Click += new System.EventHandler(this.B_Clear_Click);
             // 
+            // B_Resume
+            // 
+            this.B_Resume.Location = new System.Drawing.Point(168, 99);
+            this.B_Resume.Name = "B_Resume";
+            this.B_Resume.Size = new System.Drawing.Size(78, 25);
+            this.B_Resume.TabIndex = 133;
+            this.B_Resume.Text = "Resume";
+            this.B_Resume.UseVisualStyleBackColor = true;
+            this.B_Resume.Click += new System.EventHandler(this.B_Resume_Click);
+            // 
+            // BP
+            // 
+            this.BP.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BP.Location = new System.Drawing.Point(11, 65);
+            this.BP.Name = "BP";
+            this.BP.Size = new System.Drawing.Size(81, 22);
+            this.BP.TabIndex = 134;
+            this.BP.Text = "0x0000000";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(751, 371);
+            this.Controls.Add(this.BP);
+            this.Controls.Add(this.B_Resume);
             this.Controls.Add(this.B_Clear);
             this.Controls.Add(this.Log);
             this.Controls.Add(this.B_Disable);
@@ -190,6 +213,8 @@
         private System.Windows.Forms.Button B_Enable;
         private System.Windows.Forms.ListBox Log;
         private System.Windows.Forms.Button B_Clear;
+        private System.Windows.Forms.Button B_Resume;
+        private System.Windows.Forms.TextBox BP;
     }
 }
 
