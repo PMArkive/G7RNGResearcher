@@ -64,9 +64,9 @@ namespace G7ModelResearch
                     break;
                 case 2:
                 case 3:
-                    NfcOffset = Gameversion == 2 ? 0x3F341Cu : 0x3F3420u; RNGOffset = 0x361F48;
-                    FrameOffset = 0x3B2C10; BlinkOffset = 0x421E4C; SyncOffset = 0x3A7FE0;
-                    PKMGenOffset = 0x320C4C; CryOffset = 0x3B2A74;
+                    NfcOffset = Gameversion == 2 ? 0x3F3424u : 0x3F3428u; RNGOffset = 0x361F50;
+                    FrameOffset = 0x3B2C18; BlinkOffset = 0x421E54; SyncOffset = 0x3A7FE8;
+                    PKMGenOffset = 0x320C54; CryOffset = 0x3B2A7C;
                     break;
             }
             DebuggerMode();
@@ -87,8 +87,8 @@ namespace G7ModelResearch
         {
             if (!(logmsg.Contains("breakpoint ") && logmsg.Contains(" hit")))
                 return false;
-            string[] varname = { " lr:", "r0:" };
-            uint[] output = new uint[3];
+            string[] varname = { " lr:", "r0:", "r1:", "r2:" };
+            uint[] output = new uint[1 + varname.Length];
             output[0] = Convert.ToUInt32(logmsg.Substring(logmsg.IndexOf("breakpoint ", StringComparison.Ordinal) + "breakpoint ".Length, 1));
             for (int i = 0; i < varname.Length; i++)
             {

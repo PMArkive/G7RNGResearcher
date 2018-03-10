@@ -32,7 +32,7 @@ namespace G7ModelResearch
                 Log.Items.Add("Console Connected");
                 Properties.Settings.Default.IP = IP.Text;
                 Properties.Settings.Default.Save();
-                BP.Enabled = 
+                BP.Enabled =
                 B_Connect.Enabled = false;
                 B_Disconnect.Enabled = true;
                 NTR_Timer.Enabled = true;
@@ -52,6 +52,11 @@ namespace G7ModelResearch
         private int ModelIndex;
         private int lastModelNumber;
         private int Time;
+        private uint[] SkipBreakpoints =
+        {
+            0x421ECC, 0x421ED0, 0x421F3C, 0x421F40, 0x40F42C, 0x40F49C,
+            0x72F7D4, 0x72F86C,
+        };
         private void OnMsgArrival(object sender, NtrClient.InfoEventArgs e)
         {
             Invoke(new Action(() =>
@@ -60,9 +65,15 @@ namespace G7ModelResearch
                 {
                     case "Breakpoint":
                         uint[] output = (uint[])e.data;
-                        if (output[0] == 2) // RNG
+                        if (output[0] == 2 && SkipBreakpoints.Contains(output[1])) // RNG
                         {
-                            Log.Items.Add("Address:" + output[1].ToString());
+                            switch(output[1])
+                            {
+                                case 0x72F7D4:
+                                case 0x72F86C:
+                                    Log.Items.Add("Fidget");
+                                    break;
+                            }
                         }
                         else if (output[0] == 3) // 1 Graphic Frame
                         {
@@ -85,8 +96,7 @@ namespace G7ModelResearch
                             if (ModelIndex > 0)
                                 Log.Items.Add("ModelNumber:" + lastModelNumber.ToString() + "\t\t x " + Time.ToString());
                             UpdateModel();
-                            DGV.DataSource = new BindingSource(ModelStatus.Select(t => t.Clone()).ToArray(), null);
-                            DGV.CurrentCell = null;
+                            UpdateDGV();
                             RemoveFlag();
                             ModelIndex = 0;
                         }
@@ -100,6 +110,7 @@ namespace G7ModelResearch
                                     Index = ModelIndex++,
                                     address = output[2],
                                 });
+                                // B_Sort_Click(null, null);
                             }
                             else
                                 a.Index = ModelIndex++;
@@ -117,9 +128,14 @@ namespace G7ModelResearch
                                 else
                                     Log.Items.Add(ModelIndex.ToString() + "Model Passed");
                             }
+                            if (Time == 0)
+                                if (Log.Items.Count > 0) Log.Items.RemoveAt(Log.Items.Count - 1);
                             Time = Math.Min(Time, 0);
                             switch (output[0])
                             {
+                                case 2:
+                                    Log.Items.Add("Address:" + output[1].ToString("X8") + " %" + output[4].ToString());
+                                    break;
                                 case 5:
                                     Log.Items.Add("Lead Ability Check");
                                     break;
@@ -131,7 +147,7 @@ namespace G7ModelResearch
                                     if (ntrclient.ResearchOffset != null)
                                         Log.Items.Add("Custom");
                                     else
-                                        Log.Items.Add("Cry");
+                                        Log.Items.Add("Dialog Box");
                                     break;
                             }
                             Log.Items.Add("ModelNumber:" + lastModelNumber.ToString() + "\t\t x 0");
@@ -154,6 +170,12 @@ namespace G7ModelResearch
                 A.Data = ntrclient.SingleThreadRead(A.address, Model.Size);
         }
 
+        private void UpdateDGV()
+        {
+            DGV.DataSource = new BindingSource(ModelStatus.Select(t => t.Clone()).ToArray(), null);
+            DGV.CurrentCell = null;
+        }
+
         private void RemoveFlag()
         {
             foreach (var A in ModelStatus)
@@ -165,7 +187,7 @@ namespace G7ModelResearch
             ntrclient.setServer(IP.Text, 8000);
             try
             {
-                uint A = Convert.ToUInt32(BP.Text,16);
+                uint A = Convert.ToUInt32(BP.Text, 16);
                 if (A > 0)
                     ntrclient.ResearchOffset = A;
                 else
@@ -193,7 +215,7 @@ namespace G7ModelResearch
 
         private void B_run_Click(object sender, EventArgs e)
         {
-            ntrclient.bpena(2);
+            ntrclient.bpena(2); ntrclient.bpena(3);
         }
 
         private void B_Enable_Click(object sender, EventArgs e)
@@ -216,6 +238,13 @@ namespace G7ModelResearch
         private void B_Resume_Click(object sender, EventArgs e)
         {
             try { ntrclient.resume(); } catch { };
+        }
+
+        private void B_Sort_Click(object sender, EventArgs e)
+        {
+            ModelStatus = ModelStatus.OrderBy(t => t.address).ToList();
+            if (sender == B_Sort)
+                UpdateDGV();
         }
     }
 }
