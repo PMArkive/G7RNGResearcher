@@ -67,7 +67,7 @@ namespace G7ModelResearch
                         uint[] output = (uint[])e.data;
                         if (output[0] == 2 && SkipBreakpoints.Contains(output[1])) // RNG
                         {
-                            switch(output[1])
+                            switch (output[1])
                             {
                                 case 0x72F7D4:
                                 case 0x72F86C:
@@ -80,7 +80,7 @@ namespace G7ModelResearch
                             if (ModelIndex == lastModelNumber)
                             {
                                 Time++;
-                                if (Log.Items.Count > 0) Log.Items.RemoveAt(Log.Items.Count - 1);
+                                Removelastmodellog();
                             }
                             else
                             {
@@ -121,15 +121,14 @@ namespace G7ModelResearch
                             {
                                 if (ModelIndex == lastModelNumber)
                                 {
-                                    if (Log.Items.Count > 0) Log.Items.RemoveAt(Log.Items.Count - 1);
-                                    Log.Items.Add("ModelNumber:" + lastModelNumber.ToString() + "\t\t x " + (Time + 1).ToString());
+                                    Removelastmodellog();
+                                    if (Time > -1)
+                                        Log.Items.Add("ModelNumber:" + lastModelNumber.ToString() + "\t\t x " + (Time + 1).ToString());
                                     Time = -1;
                                 }
                                 else
                                     Log.Items.Add(ModelIndex.ToString() + "Model Passed");
                             }
-                            if (Time == 0)
-                                if (Log.Items.Count > 0) Log.Items.RemoveAt(Log.Items.Count - 1);
                             Time = Math.Min(Time, 0);
                             switch (output[0])
                             {
@@ -141,7 +140,7 @@ namespace G7ModelResearch
                                     break;
                                 case 6:
                                     Log.Items.Add("Generating Pokemon");
-                                    B_Disable_Click(null, null);
+                                    // B_Disable_Click(null, null);
                                     break;
                                 case 7:
                                     if (ntrclient.ResearchOffset != null)
@@ -150,7 +149,6 @@ namespace G7ModelResearch
                                         Log.Items.Add("Dialog Box");
                                     break;
                             }
-                            Log.Items.Add("ModelNumber:" + lastModelNumber.ToString() + "\t\t x 0");
                         }
                         ntrclient.resume();
                         break;
@@ -162,6 +160,14 @@ namespace G7ModelResearch
                         return;
                 }
             }));
+        }
+
+        private void Removelastmodellog()
+        {
+            if (Log.Items.Count == 0)
+                return;
+            if (((string)Log.Items[Log.Items.Count - 1]).Contains("ModelNumber:"))
+                Log.Items.RemoveAt(Log.Items.Count - 1);
         }
 
         private void UpdateModel()
