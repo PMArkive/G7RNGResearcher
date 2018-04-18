@@ -1,3 +1,3 @@
-# G7ModelResearch
+# Gen7 RNG Researcher
 
-A fork from my RNG bot, dirty and incomplete
+A NTR debug client forked from my RNG bot, dirty and incomplete.
