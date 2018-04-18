@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace G7ModelResearch
+namespace G7RNGResearcher
 {
     public class Model
     {

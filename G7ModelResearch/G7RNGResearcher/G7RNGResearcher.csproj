@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{C154E267-9876-4292-8199-E4F87937AF55}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>G7ModelResearch</RootNamespace>
-    <AssemblyName>G7ModelResearch</AssemblyName>
+    <RootNamespace>G7RNGResearcher</RootNamespace>
+    <AssemblyName>G7RNGResearcher</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -54,6 +54,7 @@
     <Compile Include="Model.cs" />
     <Compile Include="NTR\NtrClient.cs" />
     <Compile Include="NTR\NTRSeedAPI.cs" />
+    <Compile Include="PkRNG.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.resx">
@@ -67,6 +68,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

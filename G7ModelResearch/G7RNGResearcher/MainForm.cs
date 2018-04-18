@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace G7ModelResearch
+namespace G7RNGResearcher
 {
     public partial class MainForm : Form
     {
@@ -75,6 +75,14 @@ namespace G7ModelResearch
                                     break;
                             }
                         }
+                        else if (output[0] == 6) // PKMCore
+                        {
+                            uint Address = output[3];
+                            var p = new PkRNG(ntrclient.SingleThreadRead(Address, PkRNG.size));
+                            Log.Items.Add($"PKM:{Address:X7}");
+                            if (p.Species > 0 || p.PIDReroll > 1 || p.PerfectIVsCount > 0)
+                                Log.Items.AddRange(p.Report());
+                        }
                         else if (output[0] == 3) // 1 Graphic Frame
                         {
                             if (ModelIndex == lastModelNumber)
@@ -138,15 +146,17 @@ namespace G7ModelResearch
                                 case 5:
                                     Log.Items.Add("Lead Ability Check");
                                     break;
-                                case 6:
-                                    Log.Items.Add("Generating Pokemon");
-                                    // B_Disable_Click(null, null);
-                                    break;
                                 case 7:
                                     if (ntrclient.ResearchOffset != null)
                                         Log.Items.Add("Custom");
                                     else
                                         Log.Items.Add("Dialog Box");
+                                    break;
+                                case 8:
+                                    Log.Items.Add("Address:" + output[1].ToString("X8") + "&" + output[2].ToString("X8"));
+                                    break;
+                                default:
+                                    Log.Items.Add("Unk bp Address:" + output[1].ToString("X8"));
                                     break;
                             }
                         }
@@ -219,21 +229,6 @@ namespace G7ModelResearch
             OnDisconnected();
         }
 
-        private void B_run_Click(object sender, EventArgs e)
-        {
-            ntrclient.bpena(2); ntrclient.bpena(3);
-        }
-
-        private void B_Enable_Click(object sender, EventArgs e)
-        {
-            ntrclient.Enable();
-        }
-
-        private void B_Disable_Click(object sender, EventArgs e)
-        {
-            try { ntrclient.Disable(); } catch { };
-        }
-
         private void B_Clear_Click(object sender, EventArgs e)
         {
             Log.Items.Clear();
@@ -251,6 +246,59 @@ namespace G7ModelResearch
             ModelStatus = ModelStatus.OrderBy(t => t.address).ToList();
             if (sender == B_Sort)
                 UpdateDGV();
+        }
+
+        private void BP2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (BP2.Checked)
+                ntrclient.Enable(2);
+            else
+                ntrclient.Disable(2);
+        }
+
+        private void BP3_CheckedChanged(object sender, EventArgs e)
+        {
+            if (BP3.Checked)
+                ntrclient.Enable(3, 4);
+            else
+                ntrclient.Disable(3, 4);
+        }
+
+        private void BP5_CheckedChanged(object sender, EventArgs e)
+        {
+            if (BP5.Checked)
+                ntrclient.Enable(5);
+            else
+                ntrclient.Disable(5);
+        }
+
+        private void BP6_CheckedChanged(object sender, EventArgs e)
+        {
+            if (BP6.Checked)
+                ntrclient.Enable(6);
+            else
+                ntrclient.Disable(6);
+        }
+
+        private void BP7_CheckedChanged(object sender, EventArgs e)
+        {
+            if (BP7.Checked)
+                ntrclient.Enable(7);
+            else
+                ntrclient.Disable(7);
+        }
+
+        private void BP8_CheckedChanged(object sender, EventArgs e)
+        {
+            if (BP8.Checked)
+                ntrclient.Enable(8);
+            else
+                ntrclient.Disable(8);
+        }
+
+        private void B_Disable_Click(object sender, EventArgs e)
+        {
+            BP2.Checked = BP3.Checked = BP5.Checked = BP6.Checked = BP7.Checked = BP8.Checked = false;
         }
     }
 }

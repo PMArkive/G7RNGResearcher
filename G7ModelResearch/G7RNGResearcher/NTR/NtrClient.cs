@@ -3,7 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-namespace G7ModelResearch
+namespace G7RNGResearcher
 {
     public partial class NtrClient
     {
