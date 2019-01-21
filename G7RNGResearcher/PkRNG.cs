@@ -33,11 +33,12 @@ namespace G7RNGResearcher
             string[] GenderType = { "Random", "Male", "Female", "Genderless" };
             string[] AbilityType = { "Random", "1", "2", "H" };
             var pidstr = (uint)PID == uint.MaxValue ? PIDType[(PID >> 32) - 1] : PID.ToString("X");
+            var naturestr = Nature == ushort.MaxValue ? "Random" : Nature.ToString();
             var lines = new string[3];
             lines[0] = "EC:" + (EC == ulong.MaxValue ? "Random" : EC.ToString("X"));
             lines[0] += $"\tPID: {pidstr}\tRollcount:{PIDReroll}\t";
             lines[0] += "TID:" + (TID == ulong.MaxValue ? "Random" : (TID % 1000000).ToString("D6"));
-            lines[1] = $"SpecForm:{Species} - {Forme}  \tLv:{Level}\tN:{Nature}\tA:{AbilityType[(byte)(Ability + 1)]}\tG:{GenderType[(byte)(Gender + 1)]}" + Environment.NewLine;
+            lines[1] = $"SpecForm:{Species} - {Forme}  \tLv:{Level}\tN:{naturestr}\tA:{AbilityType[(byte)(Ability + 1)]}\tG:{GenderType[(byte)(Gender + 1)]}" + Environment.NewLine;
             lines[2] = $"Flawless count: {PerfectIVsCount}\tIVs:{string.Join(",", IVs.Select(iv => iv == 0xFFFF ? "R" : iv.ToString()))}";
             return lines;
         }

@@ -43,6 +43,7 @@ namespace G7RNGResearcher
         private uint CryOffset;
         public uint? ResearchOffset;
         private uint SOSOffset;
+        private uint TinyOffset;
 
         private bool getGame(string logmsg)
         {
@@ -67,8 +68,8 @@ namespace G7RNGResearcher
                 case 3:
                     NfcOffset = Gameversion == 2 ? 0x3F3424u : 0x3F3428u; RNGOffset = 0x361F50;
                     FrameOffset = 0x3B2C18; BlinkOffset = 0x421E54; SyncOffset = 0x3A7FE8;
-                    PKMGenOffset = 0x320C4C; CryOffset = 0x3B2A7C;
-                    SOSOffset = 0x5609B4;
+                    PKMGenOffset = 0x320C4C; CryOffset = 0x3B2A7C; TinyOffset = 0x3626C4;
+                     SOSOffset = 0x5609B4;
                     break;
             }
             DebuggerMode();
@@ -129,6 +130,7 @@ namespace G7RNGResearcher
             bpadd(PKMGenOffset, "code"); bpdis(6);
             bpadd(ResearchOffset ?? CryOffset, "code"); bpdis(7);
             bpadd(SOSOffset, "code"); bpdis(8);
+            bpadd(TinyOffset, "code"); bpdis(9);
             SendMsg("Breakpoint Set");
             resume();
         }

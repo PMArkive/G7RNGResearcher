@@ -55,7 +55,6 @@ namespace G7RNGResearcher
         private uint[] SkipBreakpoints =
         {
             0x421ECC, 0x421ED0, 0x421F3C, 0x421F40, 0x40F42C, 0x40F49C,
-            0x72F7D4, 0x72F86C,
         };
         private void OnMsgArrival(object sender, NtrClient.InfoEventArgs e)
         {
@@ -66,15 +65,7 @@ namespace G7RNGResearcher
                     case "Breakpoint":
                         uint[] output = (uint[])e.data;
                         if (output[0] == 2 && SkipBreakpoints.Contains(output[1])) // RNG
-                        {
-                            switch (output[1])
-                            {
-                                case 0x72F7D4:
-                                case 0x72F86C:
-                                    Log.Items.Add("Fidget");
-                                    break;
-                            }
-                        }
+                        { }
                         else if (output[0] == 6) // PKMCore
                         {
                             uint Address = output[3];
@@ -141,7 +132,16 @@ namespace G7RNGResearcher
                             switch (output[0])
                             {
                                 case 2:
-                                    Log.Items.Add("Address:" + output[1].ToString("X8") + " %" + output[4].ToString());
+                                    switch (output[1])
+                                    {
+                                        case 0x72F7D4:
+                                        case 0x72F86C:
+                                            Log.Items.Add("Fidget");
+                                            break;
+                                        default:
+                                            Log.Items.Add("Address:" + output[1].ToString("X8") + " % " + output[4].ToString());
+                                            break;
+                                    }
                                     break;
                                 case 5:
                                     Log.Items.Add("Lead Ability Check");
@@ -153,7 +153,10 @@ namespace G7RNGResearcher
                                         Log.Items.Add("Dialog Box");
                                     break;
                                 case 8:
-                                    Log.Items.Add("Address:" + output[1].ToString("X8") + "&" + output[2].ToString("X8"));
+                                    Log.Items.Add("Address:" + output[1].ToString("X8") + " & " + output[2].ToString("X8"));
+                                    break;
+                                case 9 when output[2] == 0x30af1654:
+                                    Log.Items.Add("Pelago: 0x" + output[1].ToString("X8") + "\t%" + output[3].ToString());
                                     break;
                                 default:
                                     Log.Items.Add("Unk bp Address:" + output[1].ToString("X8"));
@@ -296,9 +299,18 @@ namespace G7RNGResearcher
                 ntrclient.Disable(8);
         }
 
+        private void BP9_CheckedChanged(object sender, EventArgs e)
+        {
+            if (BP9.Checked)
+                ntrclient.Enable(9);
+            else
+                ntrclient.Disable(9);
+        }
+
         private void B_Disable_Click(object sender, EventArgs e)
         {
-            BP2.Checked = BP3.Checked = BP5.Checked = BP6.Checked = BP7.Checked = BP8.Checked = false;
+            BP2.Checked = BP3.Checked = BP5.Checked = BP6.Checked = BP7.Checked = BP8.Checked = BP9.Checked = false;
+            ntrclient.Disable(1, 2, 3, 4, 5, 6, 7, 8, 9);
         }
     }
 }

@@ -47,6 +47,7 @@
             this.BP6 = new System.Windows.Forms.CheckBox();
             this.BP5 = new System.Windows.Forms.CheckBox();
             this.BP8 = new System.Windows.Forms.CheckBox();
+            this.BP9 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.DGV)).BeginInit();
             this.SuspendLayout();
             // 
@@ -225,11 +226,23 @@
             this.BP8.UseVisualStyleBackColor = true;
             this.BP8.CheckedChanged += new System.EventHandler(this.BP8_CheckedChanged);
             // 
+            // BP9
+            // 
+            this.BP9.AutoSize = true;
+            this.BP9.Location = new System.Drawing.Point(81, 139);
+            this.BP9.Name = "BP9";
+            this.BP9.Size = new System.Drawing.Size(61, 17);
+            this.BP9.TabIndex = 141;
+            this.BP9.Text = "9 - Tiny";
+            this.BP9.UseVisualStyleBackColor = true;
+            this.BP9.CheckedChanged += new System.EventHandler(this.BP9_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(868, 384);
+            this.Controls.Add(this.BP9);
             this.Controls.Add(this.BP7);
             this.Controls.Add(this.BP8);
             this.Controls.Add(this.BP5);
@@ -273,6 +286,7 @@
         private System.Windows.Forms.CheckBox BP6;
         private System.Windows.Forms.CheckBox BP5;
         private System.Windows.Forms.CheckBox BP8;
+        private System.Windows.Forms.CheckBox BP9;
     }
 }
 
